@@ -16,10 +16,6 @@ sera acrescentado.
 ![image](https://user-images.githubusercontent.com/43469465/170609883-e04b64cd-2776-4ad8-8b48-e51c0a89bed0.png)
 
 
-# Gif da primeira parte feita
-
-![primeira_parte](https://user-images.githubusercontent.com/43469465/170716978-b216e092-3bfc-4ba6-932f-5079287d0469.gif)
-
-#Gif com a parte final
+# Gif com a parte final
 
 ![segunda_parte](https://user-images.githubusercontent.com/43469465/170774052-e871bfa1-4c5c-45a3-9cf1-1bc861a8f3a6.gif)
