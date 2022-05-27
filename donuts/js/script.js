@@ -93,6 +93,33 @@ const pegarKey = (e) => {
 
 }
 
+const preencherTamanhos = (key) =>{
+    //tirar a seleção do tamanho por ultimo
+    seleciona('.pizzaInfo--size.selected').classList.remove('selected')
+
+
+    selecionaTodos('.pizzaInfo--size').forEach((size, sizeIndex) =>{
+        (sizeIndex == 2) ? size.classList.add('selected'): ''
+        size.querySelector('span').innerHTML = donutsJson[key].size[sizeIndex]
+    })
+}
+
+const escolherTamanho = (key) => {
+ // ação nos botoes de taamanho
+ //seleciona todos os tamaanhos
+
+ selecionaTodos('.pizzaInfo--size').forEach((size,sizeIndex) => {
+    size.addEventListener('click', (e) => {
+        seleciona('.pizzaInfo--size.selected').classList.remove('selected')
+
+        size.classList.add('selected')
+        seleciona('pizzaInfo--actualPrice').innerHTML = formatoReal(donutsJson[key].price[sizeIndex])
+    })
+ }) 
+
+
+}
+
 
 donutsJson.map((item, index ) => {
     //console.log(item)
