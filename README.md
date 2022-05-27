@@ -6,3 +6,11 @@
 
 
 ![image](https://user-images.githubusercontent.com/43469465/170609229-6981fea4-25c0-45d6-a9d2-f1a2be7abc20.png)
+
+
+# Clicar no Donuts
+Ao clicar no item, aparece as opções de tamanho, com o valor e fato
+se clicar em adicionar no carrinho o intem sera enviado e seu valor
+sera acrescentado.
+
+![image](https://user-images.githubusercontent.com/43469465/170609883-e04b64cd-2776-4ad8-8b48-e51c0a89bed0.png)
