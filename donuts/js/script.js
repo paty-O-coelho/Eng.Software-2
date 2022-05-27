@@ -1,3 +1,5 @@
+//variaveis para serem ultilizadas globalmente no projeto
+
 let modalKey = 0
 let quantDonuts = 1
 let cart = []
@@ -29,30 +31,7 @@ const fecharModal = () => {
     seleciona('.pizzaWindowArea').style.opacity = 0 // transparente
     setTimeout(() => seleciona('.pizzaWindowArea').style.display = 'none', 500)
 }
-/*
-const botoesFechar = () =>{
 
-   
-    //evento para quando apertar em cancelar ele fecha o modal com os donuts
-    document.querySelector('.pizzaInfo--cancelButton').addEventListener('click',()=>{
-        document.querySelector('.pizzaWindowArea').style.display='none'
-
-    })
-
-
-    //evento para voltar no modo mobile
-    document.querySelector('.pizzaInfo--cancelMobileButton').addEventListener('click',()=>{
-        document.querySelector('.pizzaWindowArea').style.display='none'
-
-    })
-
-
-    selecionaTodos('.pizzaInfo--cancelButton, .pizzaInfo--cancelMobileButton').forEach((item) =>{
-        item.addEventListener('click',fecharModal)
-    })
-
-}
-*/
 
 const botoesFechar = () => {
     // BOTOES FECHAR MODAL
@@ -84,6 +63,7 @@ const preencheDadosModal = (item) =>{
     document.querySelector('.pizzaInfo--actualPrice').innerHTML = formatoReal(item.price[2])
     
 }
+//pizzaJson donutsJson
 
 const pegarKey = (e) => {
     let key = e.target.closest('.pizza-item').getAttribute('data-key')
@@ -109,21 +89,7 @@ const preencherTamanhos = (key) => {
 
 
 }
-/*
-const escolherTamanhoPreco = (key) => {
- // ação nos botoes de taamanho
- //seleciona todos os tamaanhos
 
- selecionaTodos('.pizzaInfo--size').forEach((size,sizeIndex) => {
-    size.addEventListener('click', (e) => {
-        seleciona('.pizzaInfo--size.selected').classList.remove('selected')
-
-        size.classList.add('selected')
-        seleciona('pizzaInfo--actualPrice').innerHTML = formatoReal(donutsJson[key].price[sizeIndex])
-     })
-    }) 
-}
-*/
 const escolherTamanhoPreco = (key) => {
     // Ações nos botões de tamanho
     // selecionar todos os tamanhos
@@ -155,6 +121,178 @@ const mudarQuantidade = () => {
         }
     })
 }
+
+
+const adicionarNoCarrinho = () => {
+    seleciona('.pizzaInfo--addButton').addEventListener('click', () => {
+        console.log('Adicionar no carrinho')
+
+        // pegar dados da janela modal atual
+    	// qual pizza? pegue o modalKey para usar pizzaJson[modalKey]
+    	console.log("Pizza " + modalKey)
+    	// tamanho
+	    let size = seleciona('.pizzaInfo--size.selected').getAttribute('data-key')
+	    console.log("Tamanho " + size)
+	    // quantidade
+    	console.log("Quant. " + quantDonuts)
+        // preco
+        let price = seleciona('.pizzaInfo--actualPrice').innerHTML.replace('R$&nbsp;', '')
+    
+        // crie um identificador que junte id e tamanho
+	    // concatene as duas informacoes separadas por um símbolo, vc escolhe
+	    let identificador = donutsJson[modalKey].id+'t'+size
+
+        // antes de adicionar verifique se ja tem aquele codigo e tamanho
+        // para adicionarmos a quantidade
+        let key = cart.findIndex( (item) => item.identificador == identificador )
+        console.log(key)
+
+        if(key > -1) {
+            // se encontrar aumente a quantidade
+            cart[key].qt += quantDonuts
+        } else {
+            // adicionar objeto pizza no carrinho
+            let pizza = {
+                identificador,
+                id: donutsJson[modalKey].id,
+                size, // size: size
+                qt: quantDonuts,
+                price: parseFloat(price) // price: price
+            }
+            cart.push(pizza)
+            console.log(pizza)
+            console.log('Sub total R$ ' + (pizza.qt * pizza.price).toFixed(2))
+        }
+
+        fecharModal()
+        abrirCarrinho()
+        atualizarCarrinho()
+    })
+}
+
+const abrirCarrinho = () => {
+    console.log('Qtd de itens no carrinho ' + cart.length)
+    if(cart.length > 0) {
+        // mostrar o carrinho
+	    seleciona('aside').classList.add('show')
+        seleciona('header').style.display = 'flex' // mostrar barra superior
+    }
+
+    // exibir aside do carrinho no modo mobile
+    seleciona('.menu-openner').addEventListener('click', () => {
+        if(cart.length > 0) {
+            seleciona('aside').classList.add('show')
+            seleciona('aside').style.left = '0'
+        }
+    })
+}
+
+const fecharCarrinho = () => {
+    // fechar o carrinho com o botão X no modo mobile
+    seleciona('.menu-closer').addEventListener('click', () => {
+        seleciona('aside').style.left = '100vw' // usando 100vw ele ficara fora da tela
+        seleciona('header').style.display = 'flex'
+    })
+}
+
+const atualizarCarrinho = () => {
+    // exibir número de itens no carrinho
+	seleciona('.menu-openner span').innerHTML = cart.length
+	
+	// mostrar ou nao o carrinho
+	if(cart.length > 0) {
+
+		// mostrar o carrinho
+		seleciona('aside').classList.add('show')
+
+		// zerar meu .cart para nao fazer insercoes duplicadas
+		seleciona('.cart').innerHTML = ''
+
+        // crie as variaveis antes do for
+		let subtotal = 0
+		let desconto = 0
+		let total    = 0
+
+        // para preencher os itens do carrinho, calcular subtotal
+		for(let i in cart) {
+			// use o find para pegar o item por id
+			let pizzaItem = donutsJson.find( (item) => item.id == cart[i].id )
+			console.log(pizzaItem)
+
+            // em cada item pegar o subtotal
+        	subtotal += cart[i].price * cart[i].qt
+            //console.log(cart[i].price)
+
+			// fazer o clone, exibir na telas e depois preencher as informacoes
+			let cartItem = seleciona('.models .cart--item').cloneNode(true)
+			seleciona('.cart').append(cartItem)
+
+			let pizzaSizeName = cart[i].size
+
+			let pizzaName = `${pizzaItem.name} (${pizzaSizeName})`
+
+			// preencher as informacoes
+			cartItem.querySelector('img').src = pizzaItem.img
+			cartItem.querySelector('.cart--item-nome').innerHTML = pizzaName
+			cartItem.querySelector('.cart--item--qt').innerHTML = cart[i].qt
+
+			// selecionar botoes + e -
+			cartItem.querySelector('.cart--item-qtmais').addEventListener('click', () => {
+				console.log('Clicou no botão mais')
+				// adicionar apenas a quantidade que esta neste contexto
+				cart[i].qt++
+				// atualizar a quantidade
+				atualizarCarrinho()
+			})
+
+			cartItem.querySelector('.cart--item-qtmenos').addEventListener('click', () => {
+				console.log('Clicou no botão menos')
+				if(cart[i].qt > 1) {
+					// subtrair apenas a quantidade que esta neste contexto
+					cart[i].qt--
+				} else {
+					// remover se for zero
+					cart.splice(i, 1)
+				}
+
+                (cart.length < 1) ? seleciona('header').style.display = 'flex' : ''
+
+				// atualizar a quantidade
+				atualizarCarrinho()
+			})
+
+			seleciona('.cart').append(cartItem)
+
+		} // fim do for
+
+		// fora do for
+		// calcule desconto 10% e total
+		//desconto = subtotal * 0.1
+		desconto = subtotal * 0
+		total = subtotal - desconto
+
+		// exibir na tela os resultados
+		// selecionar o ultimo span do elemento
+		seleciona('.subtotal span:last-child').innerHTML = formatoReal(subtotal)
+		seleciona('.desconto span:last-child').innerHTML = formatoReal(desconto)
+		seleciona('.total span:last-child').innerHTML    = formatoReal(total)
+
+	} else {
+		// ocultar o carrinho
+		seleciona('aside').classList.remove('show')
+		seleciona('aside').style.left = '100vw'
+	}
+}
+
+const finalizarCompra = () => {
+    seleciona('.cart--finalizar').addEventListener('click', () => {
+        console.log('Finalizar compra')
+        seleciona('aside').classList.remove('show')
+        seleciona('aside').style.left = '100vw'
+        seleciona('header').style.display = 'flex'
+    })
+}
+
 
 
 
@@ -197,3 +335,8 @@ donutsJson.map((item, index ) => {
 })
 
 mudarQuantidade()
+
+adicionarNoCarrinho()
+atualizarCarrinho()
+fecharCarrinho()
+finalizarCompra()
