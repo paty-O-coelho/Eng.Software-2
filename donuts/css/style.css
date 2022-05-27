@@ -37,7 +37,7 @@ header h1 {
 .menu-openner {
     margin-right: 15px;
     font-size: 26px;
-    background-color: #ef9a9a;
+    background-color: #EEE;
     padding: 5px 20px;
     border-radius: 5px;
     cursor: pointer;
@@ -55,7 +55,7 @@ header h1 {
 }
 
 aside {
-    background-color:#ffcdd2;
+    background-color:#ef9a9b;
     width:0vw;
     font-family:'Hepta Slab', Helvetica, Arial;
     transition:all ease .2s;
@@ -128,7 +128,7 @@ h1, h2 {
 }
 
 .pizza-item a:hover .pizza-item--add {
-    background-color:#ef9a9a;
+    background-color:#000;
 }
 
 .pizza-item--price {
@@ -237,13 +237,13 @@ h1, h2 {
 }
 
 .pizzaInfo--size.selected {
-    background-color:#d32f2f;
+    background-color:#32a345;
     color:#FFF;
 }
 
-.pizzaInfo--size.selected span {
-    color:#D6D6D6;
-}
+/* .pizzaInfo--size.selected span {
+    color:#d32f2f;
+} */
 
 .pizzaInfo--size span {
     font-size:12px;
